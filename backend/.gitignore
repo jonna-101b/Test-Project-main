@@ -1,2 +1,3 @@
-node_modules
+# Ignore backend dependencies
+node_modules/
 .env
