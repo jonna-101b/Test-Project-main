@@ -11,13 +11,6 @@ function IdeaList({ list }: IdeaListProps) {
     timestamp: Date.now(),
   });
 
-  useEffect(() => {
-    setRenderInfo({
-      count: renderInfo.count + 1,
-      timestamp: Date.now(),
-    });
-  }, [renderInfo]);
-
   if (list.length === 0) {
     return (
       <p className="status-message">
