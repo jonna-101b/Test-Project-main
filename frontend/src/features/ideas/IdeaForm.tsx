@@ -1,20 +1,23 @@
 import { useState, type MouseEvent } from "react";
 import SubmitButton from "../../components/SubmitButton";
-import axios from "axios";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../app/store";
+import { createIdeas } from "./ideasSlice";
 
 function IdeaForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const dispatch = useDispatch<AppDispatch>();
 
   const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:5000/", { title, description });
-      console.log("Succesful", res);
-    }
-    catch {
-      console.log("Error occurred!")
-    }
+
+    if (!title.trim() || !description.trim()) return;
+
+    dispatch(createIdeas({ title, description }));
+
+    setTitle("");
+    setDescription("");
   };
 
   return (

@@ -2,33 +2,48 @@ const Idea = require("../models/Idea");
 
 async function getIdeas(req, res) {
     try { 
-        const response = Idea.findOne();
+        const response = await Idea.find().sort({ createdAt: -1 });
         return res.status(200).json(response);
     }
     catch (error) { 
-        res.status(404).json("error:", error.message)
+        res.status(404).json({ error: error.message })
     }
 }
 
 async function createIdeas(req, res) {
     const { title, description } = req.body;
+
     try { 
-        const response = Idea.findByOneAndUpdate({ title, description });
+        const response = await Idea.create({ title, description });
         return res.status(200).json(response);
     }
     catch (error) { 
-        res.status(404).json("error:", error.message)
+        res.status(404).json({ error: error.message })
+    }
+}
+async function updateIdeas(req, res) {
+    const id = req.params.id;
+    const { title, description } = req.body;
+
+    try { 
+        const response = await Idea.findByIdAndUpdate(id, { title, description });
+        return res.status(200).json(response);
+    }
+    catch (error) { 
+        res.status(404).json({ error: error.message })
     }
 }
 
 async function deleteIdeas(req, res) {
+    const id = req.params.id;
+
     try { 
-        const response = Idea.findOneAndDelete();
+        const response = await Idea.findByIdAndDelete(id);
         return res.status(200).json(response);
     }
     catch (error) { 
-        res.status(404).json("error:", error.message)
+        res.status(404).json({ error: error.message })
     }
 }
 
-module.exports = {getIdeas, createIdeas, deleteIdeas}
+module.exports = {getIdeas, createIdeas, updateIdeas, deleteIdeas}

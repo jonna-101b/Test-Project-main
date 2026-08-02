@@ -1,24 +1,27 @@
-import axios from 'axios';
 import { useState, type FormEvent } from 'react';
-import { useJwt } from "react-jwt";
-// import JWT from ""
-
-// This component is intentionally not wired up to any route or navigation.
-// It exists as a standalone UI screen — hook it up (routing, auth state,
-// API call, validation, etc.) as part of the exercise.
+import { api } from '../../api/api';
+import { useNavigate } from 'react-router-dom';
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    try {
+      const res = await api.post("/auth/login", { username, password });
+  
+      localStorage.setItem("token", res.data.token);
+      navigate("/");
+    }
+    catch (error: any) {
+      console.log(error.message)
+      alert(error.message);
+    }
 
-    const Example = () => {
-      const token = "my token";
-      const { decodedToken, isExpired } = useJwt(token);
-    };
+
   };
 
   return (
@@ -27,12 +30,12 @@ function LoginPage() {
         <h2>Log in</h2>
         <p className="login-subtitle">Welcome back to Idea Tracker.</p>
 
-        <label htmlFor="email">Email</label>
+        <label htmlFor="username">Username</label>
         <input
-          id="email"
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          id="username"
+          type="username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
           placeholder="you@example.com"
         />
 

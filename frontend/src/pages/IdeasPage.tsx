@@ -1,10 +1,17 @@
 import IdeaForm from '../features/ideas/IdeaForm';
 import IdeaList from '../features/ideas/IdeaList';
-import { useState } from 'react';
-import type { IdeaListProps } from '../features/ideas/IdeaList';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '../app/store';
+import { fetchIdeas } from '../features/ideas/ideasSlice';
 
 function IdeasPage() {
-  const [globalState, setGlobalState] = useState<IdeaListProps>({ list: [] });
+  const dispatch = useDispatch<AppDispatch>();
+  const { list, error, status } = useSelector((state: RootState) => state.ideas);
+
+  useEffect(() => {
+    dispatch(fetchIdeas());
+  }, [dispatch]);
 
   return (
     <div className="app-shell">
@@ -14,7 +21,7 @@ function IdeasPage() {
       </header>
       <main className="app-main">
         <IdeaForm />
-        <IdeaList list={globalState.list} />
+        <IdeaList list={list} />
       </main>
     </div>
   );

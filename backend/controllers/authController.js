@@ -1,24 +1,42 @@
 const User = require("../models/User");
+const jwt = require("jsonwebtoken");
 
-async function loginUser(req, res, next) {
-    const { email, password } = req.body;
-    const user = await findUser(email);
+const createToken = (_id) => {
     const SECRET_KEY = process.env.JWT_SECRET;
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (isMatch) {
-        const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {
+    const token = jwt.sign({ _id }, SECRET_KEY, {
             expiresIn: '1h'
         });
     
-        res.json({ token });
-    } else {
-        res.status(401).json({ message: 'Invalid' });
+    return token;
+}
+
+async function loginUser(req, res) {
+    console.log("loginUser called: ", req.body);
+    const { username, password } = req.body;
+
+    try {
+        const user = await User.login(username, password);
+        const token = createToken(user._id);
+
+        res.status(200).json({username: user.username, token});
+    }
+    catch (error) {
+        res.status(401).json({ error: error.message });
     }
 };
 
-async function signupUser(req, res, next) {
-    res.json({})
+async function signupUser(req, res) {
+    const { username, email, password } = req.body;
+
+    try {
+        const user = await User.signup(username, email, password);
+        const token = createToken(user._id);
+
+        res.status(200).json({ username: user.username, token });
+    }
+    catch (error) {
+        res.status(401).json({ error: error.message });
+    }
 }
 
 module.exports = { loginUser, signupUser };
