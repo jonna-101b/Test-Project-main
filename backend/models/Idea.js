@@ -7,6 +7,6 @@ const IdeaSchema = new mongoose.Schema({
     description: {
         String
     }
-});
+}, {timestamp: true});
 
 module.exports = mongoose.model("Idea", IdeaSchema);
