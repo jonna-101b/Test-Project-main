@@ -46,8 +46,8 @@ function* deleteIdeasWorker(action: any): Generator {
 }
 
 export function* ideasSaga() {
-  yield takeLatest("fetchIdeas", fetchIdeasWorker);
-  yield takeLatest("createIdeas", createIdeasWorker);
-  yield takeLatest("updateIdeas", updateIdeasWorker);
-  yield takeLatest("deleteIdeas", deleteIdeasWorker);
+  yield takeLatest(fetchIdeas.type, fetchIdeasWorker);
+  yield takeLatest(createIdeas.type, createIdeasWorker);
+  yield takeLatest(updateIdeas.type, updateIdeasWorker);
+  yield takeLatest(deleteIdeas.type, deleteIdeasWorker);
 }

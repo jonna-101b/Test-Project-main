@@ -2,10 +2,14 @@ const mongoose = require("mongoose");
 
 const IdeaSchema = new mongoose.Schema({
     title: {
-        String
+        type: String,
+        required: true,
+        trim: true,
     },
     description: {
-        String
+        type: String,
+        required: true,
+        trim: true,
     }
 });
 

@@ -12,6 +12,7 @@ async function getIdeas(req, res) {
 
 async function createIdeas(req, res) {
     const { title, description } = req.body;
+    console.log("createIdeas called: ", req.body);
 
     try { 
         const response = await Idea.create({ title, description });
